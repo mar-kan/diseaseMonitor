@@ -1,70 +1,40 @@
-ΚΑΝΕΛΛΑΚΗ ΜΑΡΙΑ ΑΝΝΑ - 1115201400060
+Compilation instructions: $ make compile
+
+Execution instructions: $ make execute
+
+To clean up generated files: $ make clean
 
 
-Περιλαμβάνεται makefile, η μεταγλώττιση γίνεται με την εντολή make.
-Η εκτέλεση του προγράμματος γίνεται με την εντολή αποκλειστικά στη μορφή που ζητείται στην εκφώνηση (./diseaseMonitor -p patientRecordsFile –h1 diseaseHashtableNumOfEntries –h2 countryHashtableNumOfEntries –b bucketSize).
+Q/A application that monitors diseases in C/C++ with data structures written by hand. The program receives patient data via an input file (input files included), fills all the data structures that are described below with the patient records and wait to receive and execute any of the following commands:
+
+1. /globalDiseaseStats (optional: dates)
+
+2. /diseaseFrequency for a disease with dates (optional: country)
+
+3. /topk-Diseases k for a country (optional: dates)
+
+4. /topk-Countries k for a disease (optional: dates)
+
+5. /insertPatientRecord with recordID, firstName, lastName, diseaseID, country, entryDate, exitDate(optional)
+
+6. /recordPatientExit with recordID and exitDate
+
+7. /numCurrentPatients (optional: disease)
+
+8. /exit
 
 
-Patient Record: Η class PatientRecord αντιπροσωπεύει έναν ασθενή και αποθηκεύει τα data του. 	Χρησιμοποιείται από τις δομές μέσω δεικτών, για την πρόσβαση στα στοιχεία του ασθενή.
+The data structures that are used are a simple Linked List, a HashTable with Buckets with fixed size in bytes that resemble Linked Lists in their usage (Dynamic but can fit a limited amount of bytes), an AVL tree, a MaxHeap and a Priority Queue.
+
+1 list is used which stores all tha patient records. 
+
+2 hash tables are used which stores all tha patient records. The first uses the disease as the key and the second the country. (Used to accelerate the search / counting results by country and disease.
+
+The trees are used inside the hash tables. One is created for each bucket of each hash table (diseases and countries based). Their key are the dates (an entry date which points to when the patient was admitted) and they Used to accelerate the search / counting results by date in country and disease questions.
+
+The Max Heaps are the only data structures that are not created when the program starts. They are only used if a user inputs command 3 or 4 (from above). Depending on the input command, the key is either a disease or a country. They store the count of diseases per country (or the opposite) in descending order, prints the first K and then destruct on the spot.
+
+The queue was used in the max heaps to help keep the descending order.
 
 
-Για τη λίστα που αποθηκεύει τα δεδομένα όλων των ασθενών, δημιουργήθηκαν 2 κλάσεις:
-
-    • PatientList: Αντιπροσωπεύει μία λίστα που περιέχει όλους τους ασθενείς που θα εισαχθούν από το αρχείο. Περιέχει το 1ο στοιχείο της λίστας και διάφορες συναρτήσης για διευκόλυνση των απαραίτητων λειτουργιών. Λειτουργεί σαν στοίβα, δηλαδή οι εισαγωγές γίνονται στην αρχή, για να μην χρειάζεται να προσπελάσει όλη τη λίστα κάθε φορά. Εδώ γίνεται ο έλεγχος για διπλές εγγραφές.
-      
-    • PatientNode: Αντιπροσωπεύει έναν κόμβο της λίστας των ασθενών και περιέχει ένα PatientRecord και δείκτη στο επόμενο στοιχείο της λίστας.
-
-
-Για τα δένδρα, δημιουργήθηκαν 2 κλάσεις:
-
-    • Tree: Αντιπροσωπεύει ένα AVL δένδρο. Επέλεξα το AVL, καθώς είναι το απλούστερο balanced tree που γνωρίζω.
-      
-    • TreeNode: Αντιπροσωπεύει έναν κόμβο του δένδρου και περιέχει ένα Date (ημερομηνία εισαγωγής του ασθενή – αποτελεί το key του δένδρου), ένα PatientRecord, δείκτες για τα children του και το height, για τα απαραίτητα rotations.
-      
-    • Όλες οι λειτουργίες σχετικά με τα δένδρα γίνονται μέσα στο Hash Table.
-
-
-Για τα hash tables, δημιουργήθηκαν 3 κλάσεις:
-      
-    • HashTable: Αντιπροσωπεύει εναν hash table, με μέγεθος και μέγεθος bucket (bytes) που δίνονται κατά τη δημιουργία του, και αποθηκεύει ένα table από Bucket* που δημιουργείται δυναμικά ώστε να παίρνει στον constructor το μέγεθός του.
-      
-    • Bucket: Αντιπροσωπεύει έναν bucket του πίνακα. Περιέχει Bucket Entries, με δείκτη στο πρώτο entry, δείκτη στον επόμενο bucket αν υπάρχει, το δένδρο για το συγκεκριμένο bucket και το μέγεθος που απομένει σε bytes, το οποίο δίνεται από τον constructor και αφαιρείται ο χώρος που πιάνουν οι δείκτες του bucket.
-      
-    • BucketEntry: Αντιπροσωπεύει μία εγγραφή ενός Bucket του Hash Table. Περιέχει δείκτη στο επόμενο entry και το key του δένδρου, το οποίο δέχεται ως όρισμα από τον contructor του, για να μη χρειαστεί ξεχωριστή υλοποίηση για disease και country table.
-
-
-Για τα binary heaps, δημιουργήθηκαν 2 κλάσεις:
-
-    • MaxHeap: Αντιπροσωπεύει ένα max binary heap σε μία δική μου δυναμική προσέγγιση. Λειτουργεί λοιπόν σε γενικές γραμμές σαν ένα binary tree. Αποθηκεύει όμως εκτός από τα απαραίτητα και μία βοηθητική λίστα (HeapList), για να γίνεται σωστά η εισαγωγή και το heap να είναι complete, η οποία αναλύεται περισσότερο παρακάτω.
-      
-    • HeapNode: Αντιπροσωπεύει έναν κόμβο του πίνακα του max heap. Περιέχει ένα κλειδί key, το οποίο είναι disease ή country, αναλόγως με την εντολή που έχει δόσει ο χρήστης, και το πλήθος (count) των ατόμων που έχουν νοσήσει από αυτό το νόσημα/σε εκείνη τη χώρα. Εκτός από τα παιδιά, αποθηκεύει και δείκτη στον πατέρα για ευκολία στα swaps και heapify.
-      
-    • Τα MaxHeaps χρησιμοποιούνται μόνο στις εντολές topk, όπου δημιουργούνται επιτόπου, εκτελούν τη λειτουργία τους και διαγράφονται κατευθείαν. Δημιουργούνται μέσω των Hash Tables, μέσω της CopyToHeap, που δέχεται σα string το κλειδί (disease ή country αναλόγως την εντολή), βρίσκει τη θέση του στον πίνακα και καλεί την CopyToHeap του Tree για το δένδρο του Bucket που βρήκε. Εκεί αντιγράφονται τα δεδομένα των κόμβων στο heap, ανάλογα με το key τους (diseaseID ή country) και υπολογίζονται τα counts, χωρίς να δέχονται duplicates. Η εισαγωγή γίνεται σωστά από άποψη complete tree. Όσον αφορά την ταξινόμηση, γίνεται σωστά μέχρι ένα σημείο, ωστόσο επειδή έχει γίνει αρκετός αυτοσχεδιασμός στα swaps, δυσκολεύτηκα ύστερα από κάποιο σημείο.
-
-
-Εκτός από αυτές, δημιουργήθηκε 1 επιπλέον βοηθητική δομή για τα binary heaps, μία λίστα η οποία δουλεύει σαν priority queue:
-
-    • Queue: Αντιπροσωπεύει μία απλή λίστα, η οποία λειτουργεί σαν ουρά προτεραιότητας (FILO). Χρησιμοποιείται για να παραμένει το heap complete κατα την εισαγωγή. Συγκεκριμένα, εισάγονται σε αυτή όλοι οι κόμβοι που εισάγονται στο δένδρο με τη σειρά. Διαγράφονται από τη λίστα όταν αποκτούν 2 παιδιά. Έτσι, η εισαγωγή γίνεται με τη σωστή σειρά. Επιπλέον, χρησιμοποιείται κατά την εκτύπωση (PrintTopK), ώστε να εκτυπωθούν οι κόμβοι με αύξουσα σειρά. Χρησιμοποιείται depth-first traversal. Περιέχει επίσης και την class QueueNode, που είναι ένας κόμβος της λίστας που περιέχει δείκτη σε έναν HeapNode του MaxHeap.
-      
-    • Και οι 2 αυτές ουρές, κατασκευάζονται, χρησιμοποιούνται και διαγράφονται μέσα στο MaxHeap και πουθενά αλλού εκτός.
- 
-
-Dates: Δημιουργήθηκε μία κλάση Date για την ευκολότερη διαχείριση και σύγκριση των 	ημερομηνιών. Δέχεται ολόκληρη την ημερομηνία σα string, τη σπάει και την αποθηκεύει σε ints, καθώς και ολόκληρη σε ένα string, για να εκτυπώνεται εύκολα.
-
-
-Functions: Περιέχει διάφορες συναρτήσεις που δημιουργήθηκαν για να μπορούν να χρησιμοποιηθούν από όλο το πρόγραμμα.
-
-
-DiseaseFunctionMain: Δέχεται σαν ορίσματα τις απαραίτητες μεταβλητές. Αρχικοποιεί τις δομές και ανοίγει το αρχείο. Εισάγει τα στοιχεία σε όλες τις δομές δεδομένων. Η λίστα και τα hash tables χρησιμοποιούνται από τη main, ενώ τα δένδρα μέσα από τα hash tables.
-	Εκτυπώνει το μενού επιλογών του χρήστη και περιμένει μια είσοδο στη μορφή που ζητείται από την εκφώνηση. Αυτό συμβαίνει μέχρι ο χρήστης να δώσει την εντολή “exit”. Αναλόγως με την εντολή που θα δώσει ο χρήστης, εκτελούνται όλες οι εντολές με βάση τις προδιαγραφές της εκφώνησης, μέσω όλων των δομών.
-	Τέλος, διαγράφονται όλες οι δομές και κλείνει το πρόγραμμα.
-
-
-Στις κλάσεις των δομών, εκτός από τις απαραίτητες, έχουν υλοποιηθεί διάφορες συναρτήσεις για την υλοποίηση των προδιαγραφών της εκφώνησης. Οι περισσότερες λειτουργίες γίνονται μέσω των hash tables και των δένδρων. Υπάρχουν παρόμοιες συναρτήσεις που έχουν ελάχιστες διαφορές αναλόγως με τα ορίσματα με τα οποία θα κληθούν για την εκτύπωση των counters και για τις υπόλοιπες λειτουργίες της εκφώνησης, οι οποίες περιγράφονται αναλυτικά με σχόλια στον κώδικα. 
-Μία νέα εισαγωγή από το χρήστη εισάγεται σε όλες τις δομές. 
-Το μόνο σημείο που χρησιμοποιείται η λίστα είναι η αναζήτηση με record ID. Χρησιμοποίησα τη λίστα, καθώς οι άλλες δομές έχουν άσχετα κλειδιά με το id και καμία δεν επιταχύνει τη συγκεκριμένη αναζήτηση.
-
-
-Περισσότερα για την υλοποίηση του προγράμματος βρίσκονται σε αναλυτικά σχόλια πάνω στον κώδικα.
-
-Στον υπολογιστή μου, το valgrind δεν έχει καθόλου leaks. Παρατήρησα ότι στης σχολής τρώει το κλασσικό error του g++ 5.4 με ακριβώς τα ίδια bytes που θα έτρωγε ένα απλό helloworld.
+Each patient record is stored and used in tha data structures via pointers to avoid data duplication. 
