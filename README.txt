@@ -24,7 +24,8 @@ Q/A application that monitors diseases in C/C++ with data structures written by 
 8. /exit
 
 
-The data structures that are used are a simple Linked List, a HashTable with Buckets with fixed size in bytes that resemble Linked Lists in their usage (Dynamic but can fit a limited amount of bytes), an AVL tree, a MaxHeap and a Priority Queue.
+The data structures that are used are a simple Linked List, a HashTable with Buckets with fixed size in bytes that resemble Linked Lists in their usage (Dynamic
+but can fit a limited amount of bytes), an AVL tree, a MaxHeap and a Priority Queue.
 
 1 list is used which stores all tha patient records. 
 
