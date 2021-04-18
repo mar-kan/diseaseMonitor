@@ -5,7 +5,8 @@ Execution instructions: $ make execute
 To clean up generated files: $ make clean
 
 
-Q/A application that monitors diseases in C/C++ with data structures written by hand. The program receives patient data via an input file (input files included), fills all the data structures that are described below with the patient records and wait to receive and execute any of the following commands:
+Q/A application that monitors diseases in C/C++ with data structures written by hand. The program receives patient data via an input file (input files included),
+fills all the data structures that are described below with the patient records and wait to receive and execute any of the following commands:
 
 1. /globalDiseaseStats (optional: dates)
 
@@ -29,11 +30,15 @@ but can fit a limited amount of bytes), an AVL tree, a MaxHeap and a Priority Qu
 
 1 list is used which stores all tha patient records. 
 
-2 hash tables are used which stores all tha patient records. The first uses the disease as the key and the second the country. (Used to accelerate the search / counting results by country and disease.
+2 hash tables are used which stores all tha patient records. The first uses the disease as the key and the second the country. (Used to accelerate the search
+or counting results by country and disease.
 
-The trees are used inside the hash tables. One is created for each bucket of each hash table (diseases and countries based). Their key are the dates (an entry date which points to when the patient was admitted) and they Used to accelerate the search / counting results by date in country and disease questions.
+The trees are used inside the hash tables. One is created for each bucket of each hash table (diseases and countries based). Their key are the dates (an entry
+date which points to when the patient was admitted) and they Used to accelerate the search / counting results by date in country and disease questions.
 
-The Max Heaps are the only data structures that are not created when the program starts. They are only used if a user inputs command 3 or 4 (from above). Depending on the input command, the key is either a disease or a country. They store the count of diseases per country (or the opposite) in descending order, prints the first K and then destruct on the spot.
+The Max Heaps are the only data structures that are not created when the program starts. They are only used if a user inputs command 3 or 4 (from above).
+Depending on the input command, the key is either a disease or a country. They store the count of diseases per country (or the opposite) in descending order,
+prints the first K and then destruct on the spot.
 
 The queue was used in the max heaps to help keep the descending order.
 
