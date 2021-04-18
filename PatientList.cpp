@@ -17,6 +17,7 @@ PatientNode::PatientNode(PatientRecord *rec)        //initializes a record with 
 
 
 PatientNode::~PatientNode()                         //deletes record only
+{
     delete record;
 }
 
