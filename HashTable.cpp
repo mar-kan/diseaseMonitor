@@ -31,8 +31,6 @@ Bucket::Bucket(int size)                                        //initializes em
 Bucket::~Bucket()                                               //deletes a bucket, the tree and its entries without touching the next Bucket
 {
     delete tree;
-    nextBucket = NULL;
-    delete nextBucket;
 
     BucketEntry * temp, * entry = first;
     while (entry)

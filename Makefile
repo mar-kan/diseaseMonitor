@@ -27,3 +27,9 @@ Queue.o: Queue.cpp Queue.h
 
 clean:
 	rm *.o diseaseMonitor
+
+execute:
+	./diseaseMonitor -p input_files/medium.txt -h1 20 -h2 20 -b 10
+
+valgrind:
+	valgrind ./diseaseMonitor -p input_files/medium.txt -h1 20 -h2 20 -b 10

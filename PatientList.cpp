@@ -16,10 +16,7 @@ PatientNode::PatientNode(PatientRecord *rec)        //initializes a record with 
 }
 
 
-PatientNode::~PatientNode()                         //deletes next's pointer, without deleting that element, and record
-{
-    next = NULL;
-    delete next;
+PatientNode::~PatientNode()                         //deletes record only
     delete record;
 }
 
