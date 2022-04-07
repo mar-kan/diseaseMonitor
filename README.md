@@ -5,8 +5,8 @@ Execution instructions: $ make execute
 To clean up generated files: $ make clean
 
 
-Q/A application that monitors diseases in C/C++ with data structures written by hand. The program receives patient data via an input file (input files included),
-fills all the data structures that are described below with the patient records and wait to receive and execute any of the following commands:
+Q/A application that monitors diseases in C/C++ with hand-written data structures. The program receives patient data via an input file (input files are included),
+fills all the data structures that are described below with the patient records and waits to receive and execute any of the following commands:
 
 1. /globalDiseaseStats (optional: dates)
 
