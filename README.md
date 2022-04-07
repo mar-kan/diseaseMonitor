@@ -26,7 +26,9 @@ fills all the data structures that are described below with the patient records 
 
 
 The data structures that are used are a simple Linked List, a HashTable with Buckets with fixed size in bytes that resemble Linked Lists in their usage (Dynamic
-but can fit a limited amount of bytes), an AVL tree, a MaxHeap and a Priority Queue.
+but can fit a limited amount of bytes), an AVL tree, a MaxHeap and a Priority Queue. They can be seen in the following figure:
+
+![Screenshot 2022-04-07 at 19-16-04 hw1-spring-2020 pdf](https://user-images.githubusercontent.com/62807134/162250010-260f053c-5394-4a03-8045-16c8d34fb644.png)
 
 1 list is used which stores all tha patient records. 
 
